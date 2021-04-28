@@ -1,0 +1,29 @@
+<!--
+   Project:       videoCapture
+   File Name:     play
+   Author:        Chaos
+   Email:         life0531@foxmail.com
+   Date:          2021/4/28
+   Software:      PyCharm
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Play Video</title>
+</head>
+<body>
+<div id="mainContainer">
+    {% if status != 200 %}
+        <h3>Cannot found the right video, please try again!</h3>
+    {% else %}
+        <h1>播放视频</h1>
+        <hr>
+        <video src="{{ video }}" controls="controls" autoplay="autoplay"></video>
+        <hr>
+        <h3>视频摘要</h3>
+        <p>{{ summary }}</p>
+    {% endif %}
+</div>
+</body>
+</html>

@@ -8,7 +8,7 @@
 
 #### URL
 
-> http://49.234.127.192:1111/showApiFake/
+> http://49.234.127.192:1111/show/showApiFake/
 
 #### Parameters
 

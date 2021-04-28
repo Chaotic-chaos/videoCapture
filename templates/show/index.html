@@ -1,0 +1,27 @@
+<!--
+   Project:       videoCapture
+   File Name:     index
+   Author:        Chaos
+   Email:         life0531@foxmail.com
+   Date:          2021/4/28
+   Software:      PyCharm
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+</head>
+<body>
+<div id="mainContainer">
+    <h1>Demo</h1>
+    <hr>
+    <form action="/show/index/", method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+</body>
+</html>
