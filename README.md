@@ -28,3 +28,14 @@ Two men are playing table tennis game.
 404
 ```
 
+
+
+## 前端页面使用
+
+### URL
+
+> http://49.234.127.192:1111/show/index
+
+### Notes
+
+1. 目前只支持数据库内已经有的
