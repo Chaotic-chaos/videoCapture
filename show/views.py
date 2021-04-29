@@ -6,10 +6,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from django.urls import reverse
+from tencentcloud.common import credential
+from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
+from tencentcloud.common.profile.client_profile import ClientProfile
+from tencentcloud.common.profile.http_profile import HttpProfile
+from tencentcloud.tts.v20190823 import tts_client, models
 
 from show.forms import FileForm
 from show.models import Video
-from videoCapture.settings import BASE_DIR
+from videoCapture.settings import BASE_DIR, SECRETID, SECRETKEY
 
 
 def show_api_fake(request):
@@ -53,8 +58,35 @@ def show_web_fake(request, file_name):
         print(e)
         return render(request, "show/play.html", {'status': 404})
 
+    # tts
+    try:
+        cred = credential.Credential(SECRETID, SECRETKEY)
+        httpProfile = HttpProfile()
+        httpProfile.endpoint = "tts.tencentcloudapi.com"
+
+        clientProfile = ClientProfile()
+        clientProfile.httpProfile = httpProfile
+        client = tts_client.TtsClient(cred, "ap-nanjing", clientProfile)
+
+        req = models.TextToVoiceRequest()
+        params = {
+            "Text": video.video_summary,
+            "SessionId": "55555",
+            "ModelType": 1,
+            "VoiceType": 4,
+        }
+        req.from_json_string(json.dumps(params))
+
+        resp = client.TextToVoice(req)
+        # print(resp.to_json_string())
+        tts_audio = f"data:audio/wav;base64,{json.loads(resp.to_json_string())['Audio']}"
+
+    except TencentCloudSDKException as err:
+        tts_audio = 404
+
     return render(request, "show/play.html", {
         "status": 200,
         "video": f"uploads/{file_name}",
-        "summary": video.video_summary
+        "summary": video.video_summary,
+        "tts_audio": tts_audio,
     })
