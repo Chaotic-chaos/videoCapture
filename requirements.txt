@@ -1,2 +1,1 @@
-tencentcloud_sdk_python==3.0.384
 Django==3.2
