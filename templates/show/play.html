@@ -11,19 +11,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Play Video</title>
+
+    <style>
+        body{
+            text-align: center;
+        }
+
+        #mainContainer{
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        #sub_box{
+            {#display: table-cell;#}
+            vertical-align: middle;
+        }
+
+        #video{
+            float: left;
+            margin-left: 10%;
+        }
+
+        #summary_container{
+            float: left;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
 <div id="mainContainer">
+    <h1>这里是标题</h1>
+    <p>这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述</p>
+    <hr>
     {% if status != 200 %}
         <h3>Cannot found the right video, please try again!</h3>
     {% else %}
-        <h1>播放视频</h1>
-        <hr>
-        <video src="{{ video }}" controls="controls" autoplay="autoplay" id="input_video"></video>
-        <hr>
-        <h1>视频摘要</h1>
-        <audio src="{{ tts_audio }}" id="tts_audio"></audio>
-        <h3 style="display: None" id="summary">{{ summary }}</h3>
+        <div id="sub_box">
+            <div id="video">
+                <h1>播放视频</h1>
+                <video src="{{ video }}" controls="controls" autoplay="autoplay" id="input_video"></video>
+            </div>
+            <div style="visibility: hidden; float: left;">111111111</div>
+            <div id="summary_container">
+                <h1>视频摘要</h1>
+                <audio src="{{ tts_audio }}" id="tts_audio"></audio>
+                <h3 style="visibility: hidden" id="summary">{{ summary }}</h3>
+            </div>
+        </div>
     {% endif %}
 </div>
 {% load static %}
@@ -32,7 +66,7 @@
     var summary = document.getElementById("summary");
     var audio = document.getElementById("tts_audio");
     video.onended = function () {
-        summary.style.display = '';
+        summary.style.visibility = '';
         audio.play();
     }
 </script>

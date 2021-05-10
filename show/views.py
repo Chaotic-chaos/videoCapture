@@ -47,7 +47,7 @@ def index(request):
         return redirect("show:showWeb", file_name=video_name)
     else:
         form = FileForm()
-    return render(request, "show/index.html", {'form': form})
+        return render(request, "show/index.html", {'form': form})
 
 def show_web_fake(request, file_name):
     '''一个假的前端页面，给定上传视频名称及路径，自动提取文件名并查表返回视频总结同时渲染播放页面'''

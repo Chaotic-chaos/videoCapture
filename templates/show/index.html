@@ -10,18 +10,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Demo</title>
+    <title>！标题标题！</title>
+    <style type="text/css">
+        body{
+            text-align: center;
+        }
+
+        #mainContainer{
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        #submit{
+            width: 100px;
+            height: 50px;
+            font-size: 20px;
+            color: white;
+            border-radius: 10px;
+            background-color: #19A0FA;
+        }
+    </style>
 </head>
 <body>
 <div id="mainContainer">
-    <h1>Demo</h1>
+    <h1>这里是标题</h1>
+    <p>这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述</p>
     <hr>
     <form action="/show/index/", method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form }}
-        <br><br>
-        <input type="submit" value="Submit">
+        <br><br><br>
+        <input type="submit" value="Submit" id="submit">
     </form>
+    <hr>
 </div>
 </body>
 </html>
