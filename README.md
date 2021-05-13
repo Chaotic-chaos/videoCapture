@@ -34,6 +34,32 @@
 
 
 
+### 服务端缓存好的视频特征 -> 视频描述
+
+#### Method
+
+> GET
+
+#### URL
+
+> http://10.103.14.65:1111/show/model_decode/<video_id>
+
+#### Parameters
+
+> video_id: 纯数字，直接拼接在url后面即可
+
+#### Response
+
+```json
+{
+	"summary": "<视频描述>",
+	"video_file": "<原视频路径，头部拼接服务URL即可访问视频>",
+	"audio": "<base64编码后的音频>"
+}
+```
+
+
+
 ### 视频名称 -> 视频描述
 
 #### Method
