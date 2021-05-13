@@ -6,8 +6,8 @@ videos/*
 videoCapture/settings.py
 *.tar
 uploads/
-
-
+static/
+show/deve.py
 
 
 

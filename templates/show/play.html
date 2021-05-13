@@ -11,32 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Play Video</title>
-
-    <style>
-        body{
-            text-align: center;
-        }
-
-        #mainContainer{
-            margin-right: auto;
-            margin-left: auto;
-        }
-
-        #sub_box{
-            {#display: table-cell;#}
-            vertical-align: middle;
-        }
-
-        #video{
-            float: left;
-            margin-left: 10%;
-        }
-
-        #summary_container{
-            float: left;
-            height: 100%;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css">
 </head>
 <body>
 <div id="mainContainer">
@@ -61,6 +36,8 @@
     {% endif %}
 </div>
 {% load static %}
+
+<script type="text/javascript" src="https://www.layuicdn.com/layui/layui.js"></script>
 <script>
     var video = document.getElementById("input_video");
     var summary = document.getElementById("summary");

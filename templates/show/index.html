@@ -10,39 +10,223 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>！标题标题！</title>
+    <title>Be My Eyes/视频自动描述系统</title>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css">
+
+    <!-- 行内style -->
     <style type="text/css">
-        body{
-            text-align: center;
+        body {
+
+            background-image: url("uploads/backgrounds/2.png");
+            background-repeat: repeat-y;
+            background-size: cover;
+
+
+            {#background-color: lightblue;#}
         }
 
-        #mainContainer{
-            margin-right: auto;
-            margin-left: auto;
-        }
-
-        #submit{
-            width: 100px;
-            height: 50px;
-            font-size: 20px;
-            color: white;
-            border-radius: 10px;
-            background-color: #19A0FA;
+        #mainContainer {
+            background-color: rgba(245, 245, 245, 0.8);
+            margin-top: 7%;
+            box-shadow: 0px 0px 10px 10px rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
 <body>
-<div id="mainContainer">
-    <h1>这里是标题</h1>
-    <p>这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述这里是一段描述</p>
-    <hr>
-    <form action="/show/index/", method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form }}
-        <br><br><br>
-        <input type="submit" value="Submit" id="submit">
+<div id="mainContainer" class="layui-container">
+
+    <br>
+
+    <div class="layui-row">
+        <h1>Be My Eyes / 视频内容自动语言描述系统</h1>
+    </div>
+    
+    <br><br>
+
+    <div class="layui-row">
+        <div class="layui-progress">
+            <div class="layui-progress-bar" lay-percent="100%"></div>
+        </div>
+    </div>
+
+    <br><br>
+
+    <!-- 输入视频id -->
+    <form class="layui-form" action="">
+        <div class="layui-form-item" style="text-align: center;">
+            <!-- <label class="layui-form-label">视频id</label> -->
+            <div class="layui-inline">
+                <input type="text" name="video_id" required class="layui-input layui-inline" placeholder="请输入视频id(7010-9999)" style="background-color: rgba(255, 255, 255, 0.7);">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-inline layui-btn-normal" lay-submit lay-filter="fromSubmit">获取视频描述</button>
+            </div>
+        </div>
     </form>
-    <hr>
+
+    <!-- 上传按钮 -->
+
+    <div class="layui-block" style="text-align: center;">
+        <h1 class="layui-font-20">或点击</h1>
+        <br>
+        <button type="button" class="layui-btn layui-btn-fluid layui-btn-normal " id="upload_video">
+            <i class="layui-icon">&#xe67c; 上传视频</i>
+        </button>
+        <div class="layui-progress" lay-filter="progress_bar" lay-showPercent="true">
+            <div class="layui-progress-bar layui-bg-orange" lay-percent="0%"></div>
+        </div>
+    </div>
+
+    <br><br>
+
+    <div class="layui-row">
+        <div class="layui-progress">
+            <div class="layui-progress-bar layui-bg-red" lay-percent="100%"></div>
+        </div>
+    </div>
+
+    <br><br>
+
+    <!-- 视频展示与视频总结，同时自动播放tts语音，隐藏audio播放框 -->
+    <div class="layui-row">
+        <div class="layui-bg-grey" style="padding: 30px;">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md6">
+                    <div class="layui-panel">
+                        <div style="padding: 10px; margin-left: 10px;">
+                            <i class="layui-icon">
+                                &#xe6ed;
+                                <h3 class="layui-font-20 layui-inline">视频播放</h3>
+                            </i>
+
+                            <hr class="layui-border-green">
+
+                            <div>
+                                {%load static%}
+                                <video id="video_player" poster="uploads/loading.gif" controls="controls" autoplay="autoplay" src="" style="width: 100%;height: 283px; object-fit: cover;"></video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md6" style="height: 100%">
+                    <div class="layui-panel">
+                        <div style="padding: 10px; margin-left: 10px;">
+                            <i class="layui-icon">
+                                &#xe6dc;
+                                <h3 class="layui-font-20 layui-inline">视频描述 / 语音合成</h3>
+                            </i>
+
+                            <hr class="layui-border-green">
+
+                            <p style="height: 283px; font-weight: bold; font-size: 40px;" class="" id="summary">等待上传...</p>
+                            <audio id="audio_player"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer" style="text-align: center">
+        <footer class="layui-font-12">@云南省人工智能重点实验室</footer>
+    </div>
+
 </div>
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/layui/2.6.4/layui.min.js"></script>
+<script type="text/javascript">
+    layui.use(['element', 'upload', 'form'], function(){
+        var element = layui.element;
+        var upload = layui.upload;
+        var form = layui.form;
+
+        // 上传自定义视频进行描述
+        var uploadInstance = upload.render({
+            elem: '#upload_video',
+            url: '/show/upload/',
+            method: 'POST',
+            accept: 'file',
+            before: function (){
+                var summary_container = document.getElementById("summary");
+                summary_container.innerText = "正在描述...请稍候...";
+            },
+            done: function(res){
+                // 请求成功
+                // console.log(res);
+                var summary = res.summary;
+                var video = res.video;
+                var audio = res.tts_audio;
+
+                var video_player = document.getElementById("video_player");
+                var audio_player = document.getElementById("audio_player");
+                var summary_container = document.getElementById("summary");
+
+                video_player.src = video;
+                audio_player.src = audio;
+
+                video_player.onended = function () {
+                    // 视频播放完成后的回调函数
+                    // summary_container.style.visibility = '';
+                    summary_container.innerText = summary;
+                    audio_player.play();
+
+                    // 重置上传进度为0，等待下次上传
+                    element.progress('progress_bar', 0);
+                }
+
+            },
+
+            error: function(){
+                layer.msg('内部服务器错误，请联系系统管理员');
+            },
+
+            progress: function(n, elem, res, index){
+                var percent = n + "%";
+                element.progress('progress_bar', percent);
+            }
+        })
+
+        // 输入视频id进行描述转写
+        form.on("submit(fromSubmit)", function(data){
+            video_id = data.field.video_id;
+            $.get({
+                url: "/show/model_decode/" + video_id,
+                beforeSend: function(){
+                    var summary_container = document.getElementById("summary");
+                    summary_container.innerText = "正在描述...请稍候...";
+                },
+                success: function (res) {
+                    // 成功回调
+                    // layer.msg(res);
+                    res = JSON.parse(res);
+
+                    // console.log(res);
+
+                    video = res.video_file;
+                    audio = res.audio;
+                    summary = res.summary;
+
+                    var video_player = document.getElementById("video_player");
+                    var audio_player = document.getElementById("audio_player");
+                    var summary_container = document.getElementById("summary");
+
+                    video_player.src = video;
+                    audio_player.src = audio;
+
+                    video_player.onended = function () {
+                    // 视频播放完成后的回调函数
+                    // summary_container.style.visibility = '';
+                    summary_container.innerText = summary;
+                    audio_player.play();
+                }
+                }
+            })
+            return false;
+        })
+    });
+</script>
 </body>
 </html>
